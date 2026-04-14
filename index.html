@@ -52,6 +52,16 @@ h1,h2,h3{font-family:'Playfair Display','Georgia',serif;line-height:1.15}
 .nav-menu a{text-decoration:none;color:var(--muted);font-size:0.875rem;font-weight:400;transition:color 0.2s}
 .nav-menu a:hover{color:var(--text)}
 .nav-cta{background:var(--gold)!important;color:#0e1014!important;padding:8px 20px!important;border-radius:4px!important;font-weight:600!important;font-size:0.83rem!important}
+/* HAMBURGER */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all 0.25s}
+/* MOBILE NAV DRAWER */
+.mobile-nav{display:none;position:fixed;inset:0;top:0;background:rgba(18,21,28,0.98);z-index:490;flex-direction:column;align-items:center;justify-content:center;gap:32px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{color:var(--soft);font-size:1.3rem;font-weight:400;text-decoration:none;transition:color 0.2s}
+.mobile-nav a:hover{color:var(--gold)}
+.mobile-nav .m-cta{background:var(--gold);color:#0e1014!important;padding:12px 32px;border-radius:4px;font-weight:600;font-size:1rem}
+.mobile-nav .close-btn{position:absolute;top:20px;right:5%;font-size:1.5rem;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1}
 .hero{min-height:90vh;display:flex;align-items:center;padding:80px 5% 60px;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 58% 38%,rgba(196,150,74,0.07) 0%,transparent 60%),linear-gradient(160deg,#0d1016 0%,#12151C 100%)}
 .hero-dots{position:absolute;inset:0;background-image:linear-gradient(rgba(196,150,74,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(196,150,74,0.04) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 0%,transparent 75%);mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 0%,transparent 75%)}
@@ -199,25 +209,7 @@ footer{background:#0D1016;border-top:1px solid var(--bdr);padding:60px 5% 0}
 .reveal{opacity:0;transform:translateY(18px);transition:opacity 0.6s ease,transform 0.6s ease}
 .visible{opacity:1!important;transform:translateY(0)!important}
 @media(max-width:900px){.hero-stats{display:none}.why-layout{flex-direction:column;gap:40px}.principles-wrap{flex-direction:column;gap:40px}.footer-grid{grid-template-columns:1fr 1fr}.audit-layout{flex-direction:column;gap:40px}.founder-layout{flex-direction:column;gap:40px}}
-@media(max-width:640px){
-  .nav-menu{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    padding:12px 0;
-  }
-}
-  
-
-  .navbar{padding:14px 5%}
-  .hero{padding:60px 5% 50px}
-  .section{padding:60px 5%}
-  .audit-section{padding:60px 5%}
-  .founder-section{padding:60px 5%}
-  .footer-grid{grid-template-columns:1fr;gap:28px}
-  .modal-box{padding:26px 20px}
-  .testi-card.featured-testi{grid-column:auto}
-}
+@media(max-width:640px){.nav-menu{display:none}.nav-hamburger{display:flex}.navbar{padding:14px 5%}.hero{padding:60px 5% 50px}.section{padding:60px 5%}.audit-section{padding:60px 5%}.founder-section{padding:60px 5%}.footer-grid{grid-template-columns:1fr;gap:28px}.modal-box{padding:26px 20px}.testi-card.featured-testi{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -263,13 +255,27 @@ footer{background:#0D1016;border-top:1px solid var(--bdr);padding:60px 5% 0}
   <a href="#" class="nav-logo">Legal<span>Scale</span> Solutions</a>
   <ul class="nav-menu">
     <li><a href="#services">Services</a></li>
-    <li><a href="blog.html">Blog</a></li>
     <li><a href="#audit">Free Audit</a></li>
     <li><a href="#compliance">Our Framework</a></li>
     <li><a href="#pricing">Pricing</a></li>
+    <li><a href="blog.html">Blog</a></li>
     <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
   </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-btn" id="mobileClose" aria-label="Close menu">&#10005;</button>
+  <a href="#services" class="m-link">Services</a>
+  <a href="#audit" class="m-link">Free Audit</a>
+  <a href="#compliance" class="m-link">Our Framework</a>
+  <a href="#pricing" class="m-link">Pricing</a>
+  <a href="blog.html" class="m-link">Blog</a>
+  <a href="#contact" class="m-cta">Get in Touch</a>
+</div>
 
 <section class="hero">
   <div class="hero-bg"></div>
@@ -609,6 +615,18 @@ window.addEventListener('scroll', function() {
   var nav = document.getElementById('navbar');
   if (nav) { nav.style.boxShadow = window.scrollY > 40 ? '0 4px 24px rgba(0,0,0,0.55)' : 'none'; }
 });
+
+// MOBILE NAV HAMBURGER
+var hamburger = document.getElementById('hamburger');
+var mobileNav = document.getElementById('mobileNav');
+var mobileClose = document.getElementById('mobileClose');
+if (hamburger && mobileNav) {
+  hamburger.addEventListener('click', function() { mobileNav.classList.add('open'); });
+  mobileClose.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  mobileNav.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  });
+}
 
 // Toast notification
 function showToast(msg) {
